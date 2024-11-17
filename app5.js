@@ -1,70 +1,83 @@
 const express = require("express");
 const app = express();
 
-app.set('view engine', 'ejs');
+app.set("view engine", "ejs");
 app.use("/public", express.static(__dirname + "/public"));
 
-app.get("/hello1", (req, res) => {
-  const message1 = "Hello world";
-  const message2 = "Bon jour";
-  res.render('show', { greet1:message1, greet2:message2});
-});
-
-app.get("/hello2", (req, res) => {
-  res.render('show', { greet1:"Hello world", greet2:"Bon jour"});
-});
-
-app.get("/icon", (req, res) => {
-  res.render('icon', { filename:"./public/Apple_logo_black.svg", alt:"Apple Logo"});
-});
-
-app.get("/luck", (req, res) => {
-  const num = Math.floor( Math.random() * 6 + 1 );
-  let luck = '';
-  if( num==1 ) luck = '大吉';
-  else if( num==2 ) luck = '中吉';
-  console.log( 'あなたの運勢は' + luck + 'です' );
-  res.render( 'luck', {number:num, luck:luck} );
-});
-
+// 既存のじゃんけん機能
 app.get("/janken", (req, res) => {
-  let hand = req.query.hand; // 人間の手
-  let win = Number(req.query.win); // 勝利数
-  let total = Number(req.query.total); // 合計対戦数
-  console.log({ hand, win, total });
+  let hand = req.query.hand;
+  let win = Number(req.query.win);
+  let total = Number(req.query.total);
 
-  const num = Math.floor(Math.random() * 3 + 1); // CPUの手をランダムに決定
-  let cpu = '';
-  if (num == 1) cpu = 'グー';
-  else if (num == 2) cpu = 'チョキ';
-  else cpu = 'パー';
+  const num = Math.floor(Math.random() * 3 + 1);
+  let cpu = num === 1 ? "グー" : num === 2 ? "チョキ" : "パー";
 
-  // 勝敗の判定
-  let judgement = '';
-  if (hand === cpu) {
-    judgement = '引き分け';
-  } else if (
-    (hand === 'グー' && cpu === 'チョキ') ||
-    (hand === 'チョキ' && cpu === 'パー') ||
-    (hand === 'パー' && cpu === 'グー')
-  ) {
-    judgement = '勝ち';
-    win += 1; // 人間の勝ち数を増やす
-  } else {
-    judgement = '負け';
+  let judgement = hand === cpu ? "引き分け" : 
+                  (hand === "グー" && cpu === "チョキ") || 
+                  (hand === "チョキ" && cpu === "パー") || 
+                  (hand === "パー" && cpu === "グー") ? "勝ち" : "負け";
+
+  if (judgement === "勝ち") win++;
+  total++;
+
+  res.render("janken", { your: hand, cpu: cpu, judgement: judgement, win: win, total: total });
+});
+
+// しりとりヘルパー機能
+app.get("/shiritori", (req, res) => {
+  const word = req.query.word || "";
+  let nextWordSuggestion = "";
+  let isValidShiritori = true;
+  let gameOver = false;
+
+  if (word) {
+    const lastChar = word.slice(-1);
+
+    if (lastChar === "ん") {
+      gameOver = true;
+      nextWordSuggestion = "「ん」で終わったので、ゲームオーバー！";
+    } else {
+      const shiritoriWords = {
+        あ: "あんてん", い: "いんげん", う: "うんてん", え: "えん", お: "おんせん",
+        か: "かんぱん", き: "きんかん", く: "くもん", け: "けんばん", こ: "こんとん",
+        さ: "サテン", し: "しんかんせん", す: "すいかん", せ: "せんてん", そ: "そうめん",
+        た: "たん", ち: "ちん", つ: "つみれん", て: "てんしんはん", と: "とりてん",
+        な: "なんばん", に: "にんじん", ぬ: "ぬん", ね: "ねん", の: "のうえん",
+        は: "はんぺん", ひ: "ひん", ふ: "ふん", へ: "へん", ほ: "ほんこん",
+        ま: "まんとん", み: "みんとん", む: "むかん", め: "めん", も: "もん",
+        や: "やげん", ゆ: "ゆうれん", よ: "ようけん",
+        ら: "らんたん", り: "りん", る: "るいけん", れ: "れんたん", ろ: "ろんぶん",
+        わ: "わんたん"
+      };
+
+      if (shiritoriWords[lastChar]) {
+        nextWordSuggestion = shiritoriWords[lastChar];
+      } else {
+        isValidShiritori = false;
+        nextWordSuggestion = "しりとりとして正しい言葉を入力してください。";
+      }
+    }
   }
-  total += 1; // 合計試合数を増やす
 
-  // 結果をテンプレートに渡す
-  const display = {
-    your: hand,
-    cpu: cpu,
-    judgement: judgement,
-    win: win,
-    total: total
-  };
-  res.render('janken', display);
+  res.render("shiritori", { word: word, nextWord: nextWordSuggestion, valid: isValidShiritori, gameOver: gameOver });
+});
+
+// メッセージジェネレーター機能
+app.get("/message", (req, res) => {
+  const text = req.query.text || "";
+  const type = req.query.type || "やさしく";
+  let responseMessage = "";
+
+  if (type === "罵倒する") {
+    responseMessage = `あんたの文章、ひどすぎるわ！${text.length}文字も無駄にしたわ！`;
+  } else {
+    responseMessage = `すごいね！${text.length}文字も使って素敵な文章を書けたね！`;
+  }
+
+  res.render("message", { text: text, type: type, message: responseMessage });
 });
 
 
+// サーバー起動
 app.listen(8080, () => console.log("Example app listening on port 8080!"));

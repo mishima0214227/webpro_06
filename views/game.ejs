@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>マルチゲームページ</title>
+</head>
+<body>
+    <h1>じゃんけん</h1>
+    <form action="/janken">
+        <input type="text" name="hand" required>
+        <label for="hand">何を出す？</label>
+        <input type="submit" value="じゃんけん ポン">
+        <input type="hidden" name="win" value="0">
+        <input type="hidden" name="total" value="0">
+    </form>
+
+    <hr>
+
+    <h1>メッセージジェネレーター</h1>
+    <form action="/message">
+        <textarea name="text" rows="5" cols="30" placeholder="テキストを入力してください"></textarea>
+        <br>
+        <select name="type">
+            <option value="やさしく">やさしく</option>
+            <option value="罵倒する">罵倒する</option>
+        </select>
+        <input type="submit" value="メッセージを生成する">
+    </form>
+
+    <hr>
+
+    <h1>しりとりヘルパー</h1>
+    <form action="/shiritori">
+        <input type="text" name="word" placeholder="言葉を入力" required>
+        <input type="submit" value="次の単語を提案">
+    </form>
+</body>
+</html>

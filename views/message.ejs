@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>メッセージジェネレーター</title>
+</head>
+<body>
+    <h1>メッセージジェネレーター</h1>
+    <form action="/message">
+        <textarea name="text" rows="5" cols="30" placeholder="テキストを入力してください"></textarea>
+        <br>
+        <select name="type">
+            <option value="やさしく">やさしく</option>
+            <option value="罵倒する">罵倒する</option>
+        </select>
+        <input type="submit" value="メッセージを生成する">
+    </form>
+    <% if (text) { %>
+        <p>入力したテキスト: "<%= text %>"</p>
+        <p>選択したタイプ: <%= type %></p>
+        <p>生成されたメッセージ: <%= message %></p>
+    <% } %>
+</body>
+</html>
