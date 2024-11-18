@@ -1,0 +1,100 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc} % UTF-8エンコーディングのサポート
+\usepackage{hyperref}
+
+\title{app5.js ドキュメント}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{概要}
+\texttt{app5.js} は、Node.js と Express を使用した Web アプリケーションです。このアプリは、じゃんけん、しりとりヘルパー、メッセージジェネレーターの3つの主要機能を提供します。テンプレートエンジンとして EJS を使用し、ブラウザにレンダリングされるインターフェースを作成しています。
+
+\section*{起動方法}
+\begin{enumerate}
+    \item \textbf{Node.js のインストール} \\
+    Node.js がインストールされていない場合は、\href{https://nodejs.org/}{公式サイト}からダウンロードしてインストールしてください。
+
+    \item \textbf{リポジトリのクローン} \\
+    プロジェクトのリポジトリをクローンまたはダウンロードします。\\
+    \texttt{git clone <リポジトリのURL>}
+    
+    \item \textbf{依存パッケージのインストール} \\
+    クローンしたプロジェクトのディレクトリに移動し、以下のコマンドで依存パッケージをインストールします。\\
+    \texttt{cd <プロジェクトのディレクトリ>}\\
+    \texttt{npm install}
+    
+    \item \textbf{サーバーの起動} \\
+    以下のコマンドを使用してサーバーを起動します。\\
+    \texttt{node app5.js} \\
+    サーバーが起動すると、\texttt{http://localhost:8080} にアクセスしてアプリケーションを使用できます。
+    
+    \item \textbf{Git での管理} \\
+    ファイルを編集したら、Git を使用して変更を管理します。\\
+    \texttt{git add .}\\
+    \texttt{git commit -m "変更内容の説明"}\\
+    \texttt{git push}
+\end{enumerate}
+
+\section*{機能の説明と使用手順}
+\subsection*{1. じゃんけん機能}
+\begin{itemize}
+    \item \textbf{機能の説明} \\
+    ユーザーが「グー」「チョキ」「パー」のいずれかを選択し、コンピュータとじゃんけんを行います。結果は「勝ち」「負け」「引き分け」として表示され、勝ち数・負け数・合計回数が記録されます。
+    
+    \item \textbf{使用手順} \\
+    \begin{enumerate}
+        \item \texttt{/janken} にアクセスします。
+        \item ラジオボタンで「グー」「チョキ」「パー」を選択します。
+        \item 「勝負する！」ボタンをクリックして結果を確認します。
+        \item あなたの手、コンピュータの手、結果、勝ち数、負け数、合計回数が表示されます。
+    \end{enumerate}
+    
+    \item \textbf{コードの説明} \\
+    \texttt{hand} はユーザーが選んだ手をクエリパラメータから取得します。コンピュータの手はランダムに決定され、結果は比較して判定されます。勝ち数と負け数はそれぞれカウントされ、ページに表示されます。
+\end{itemize}
+
+\subsection*{2. 逆しりとりヘルパー機能}
+\begin{itemize}
+    \item \textbf{機能の説明} \\
+    ユーザーが入力した言葉の最後の文字を解析し、次のしりとりの候補を提示します。「ん」で終わるとゲームオーバーとなります。
+    
+    \item \textbf{使用手順} \\
+    \begin{enumerate}
+        \item \texttt{/shiritori} にアクセスします。
+        \item テキストボックスに言葉を入力し、「次の単語を提案」ボタンをクリックします。
+        \item 次の候補単語が表示されます。「ん」で終わった場合はゲームオーバーと表示されます。
+    \end{enumerate}
+    
+    \item \textbf{コードの説明} \\
+    入力された単語の最後の文字を取得し、しりとりの候補単語を提示します。「ん」で終わる場合はゲームオーバーと判定し、適切なメッセージを表示します。
+\end{itemize}
+
+\subsection*{3. アメムチ文字数カウンター（メッセージジェネレーター）}
+\begin{itemize}
+    \item \textbf{機能の説明} \\
+    入力されたテキストの文字数をカウントし、「やさしく」または「罵倒する」メッセージを生成します。選択したタイプに応じて異なるメッセージが表示されます。
+    
+    \item \textbf{使用手順} \\
+    \begin{enumerate}
+        \item \texttt{/message} にアクセスします。
+        \item テキストエリアにテキストを入力します。
+        \item ドロップダウンメニューから「やさしく」または「罵倒する」を選択します。
+        \item 「メッセージを生成する」ボタンをクリックするとメッセージが表示されます。
+    \end{enumerate}
+    
+    \item \textbf{コードの説明} \\
+    \texttt{text} に入力されたテキストを取得し、文字数をカウントします。選択されたタイプに基づいて、適切なメッセージを生成して表示します。
+\end{itemize}
+
+\section*{注意事項}
+\begin{itemize}
+    \item 本アプリケーションは \textbf{EJS テンプレートエンジン} を使用してビューをレンダリングしています。EJS ファイルは \texttt{views} ディレクトリに配置されています。
+    \item \textbf{静的ファイル}（CSS、画像など）は \texttt{/public} ディレクトリに配置されています。
+    \item サーバーは \textbf{ポート 8080} で動作します。ポートを変更する場合は、\texttt{app.listen} の引数を変更してください。
+\end{itemize}
+
+\end{document}

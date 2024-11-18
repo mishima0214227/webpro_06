@@ -1,3 +1,98 @@
+janken.ejs
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>じゃんけん</title>
+</head>
+<body>
+  <h1>じゃんけんをしましょう！</h1>
+  <form action="/janken" method="get">
+    <label>
+      <input type="radio" name="hand" value="グー" required> グー
+    </label>
+    <label>
+      <input type="radio" name="hand" value="チョキ" required> チョキ
+    </label>
+    <label>
+      <input type="radio" name="hand" value="パー" required> パー
+    </label>
+    <br>
+    <input type="hidden" name="win" value="<%= win %>">
+    <input type="hidden" name="lose" value="<%= lose %>">  <!-- 負け数のフィールド -->
+    <input type="hidden" name="total" value="<%= total %>">
+    <button type="submit">勝負する！</button>
+  </form>
+
+  <h2>結果</h2>
+  <% if (your && cpu) { %>
+    <p>あなたの手: <%= your %></p>
+    <p>コンピュータの手: <%= cpu %></p>
+    <p>結果: <%= judgement %></p>
+    <p>勝ち数: <%= win %></p>
+    <p>負け数: <%= lose %></p>  <!-- 負け数を表示 -->
+    <p>合計回数: <%= total %></p>
+  <% } %>
+</body>
+</html>
+
+messege.ejs
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>アメ❤️ムチ文字数カウンター</title>
+</head>
+<body>
+    <h1>アメ❤️ムチ文字数カウンター</h1>
+    <form action="/message">
+        <textarea name="text" rows="5" cols="30" placeholder="テキストを入力してください"></textarea>
+        <br>
+        <select name="type">
+            <option value="やさしく">やさしく</option>
+            <option value="罵倒する">罵倒する</option>
+        </select>
+        <input type="submit" value="メッセージを生成する">
+    </form>
+    <% if (text) { %>
+        <p>入力したテキスト: "<%= text %>"</p>
+        <p>選択したタイプ: <%= type %></p>
+        <p>生成されたメッセージ: <%= message %></p>
+    <% } %>
+</body>
+</html>
+
+shiritori.ejs
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>逆⚡️しりとりヘルパー‼️</title>
+</head>
+<body>
+    <h1>逆⚡️しりとりヘルパー‼️</h1>
+    <form action="/shiritori">
+        <input type="text" name="word" placeholder="言葉を入力" required>
+        <input type="submit" value="次の単語を提案">
+    </form>
+    <% if (word) { %>
+        <p>入力した言葉: "<%= word %>"</p>
+        <% if (gameOver) { %>
+            <p style="color: red;"><%= nextWord %></p>
+        <% } else if (valid) { %>
+            <p>次の言葉の候補: "<%= nextWord %>"</p>
+        <% } else { %>
+            <p style="color: red;"><%= nextWord %></p>
+        <% } %>
+    <% } %>
+</body>
+</html>
+
+app5.js
+
 const express = require("express");
 const app = express();
 
@@ -122,3 +217,4 @@ app.get("/message", (req, res) => {
 
 // サーバー起動
 app.listen(8080, () => console.log("Example app listening on port 8080!"));
+
